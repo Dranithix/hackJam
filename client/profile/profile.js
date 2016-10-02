@@ -62,7 +62,7 @@ Template.profile.onRendered(() => {
                 })
 
                 _.each(Object.keys(aggregation), (type) => {
-                    aggregation[type] /= reactions.length;
+                    aggregation[type] /= reactionHistory.length;
                     aggregation[type] = +aggregation[type].toFixed(2);
                 })
 
