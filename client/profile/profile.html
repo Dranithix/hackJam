@@ -10,11 +10,9 @@
             </div>
         </div>
         <div class="row">
-            <div class="grid" style="width: 100%;">
-                {{#each thumbnail in thumbnails}}
-                    <div class="grid-item"><img class="thumbnail" src="{{thumbnail}}"></div>
-                {{/each}}
-            </div>
+            {{#each thumbnail in thumbnails}}
+                <div class="four wide column"><img class="thumbnail" src="{{thumbnail}}"></div>
+            {{/each}}
         </div>
     </div>
 </template>

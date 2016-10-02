@@ -13,21 +13,23 @@ Template.profile.helpers({
     }
 })
 
-let timeoutQuery = 0, lastQuery;
+let timeoutQuery = -1, lastQuery;
 
 Template.profile.events({
     'keydown #query'(event) {
-        if (timeoutQuery != -1) Meteor.clearTimeout(timeoutQuery);
+        if (timeoutQuery != -1) {
+            Meteor.clearTimeout(timeoutQuery);
+            timeoutQuery = -1;
+        }
     },
     'keyup #query'(event) {
         let text = $(event.currentTarget).val();
 
         if (timeoutQuery == -1) {
-            console.log(text);
             timeoutQuery = Meteor.setTimeout(() => {
-                if (lastQuery && text !== lastQuery) {
+                if (text !== lastQuery) {
                     // Search for new images.
-
+                    console.log(text);
                     Meteor.call('images.search', text, (err, res) => {
                         if (!err) {
                             imageResults.set(res.value);
@@ -39,7 +41,8 @@ Template.profile.events({
                     lastQuery = text;
                 }
                 timeoutQuery = -1;
-            }, 500);
+            }, 1000);
+            console.log(timeoutQuery);
         }
     },
 })
