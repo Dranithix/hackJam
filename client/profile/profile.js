@@ -1,6 +1,7 @@
 import {ReactiveVar} from "meteor/reactive-var";
 
 const imageResults = new ReactiveVar();
+const reactionProfileData = new ReactiveVar();
 
 Template.profile.onCreated(() => {
     Meteor.subscribe("posts.all");
@@ -10,6 +11,17 @@ Template.profile.helpers({
     'thumbnails'() {
         let thumbnailUrls = _.pluck(imageResults.get(), 'thumbnailUrl');
         return thumbnailUrls;
+    },
+    'username'() {
+        return FlowRouter.getParam("username");
+    },
+    'reactionProfile'() {
+        let data = reactionProfileData.get();
+        let formattedObj = {};
+        _.each(data, (entry) => {
+            formattedObj[entry.emoticon] = entry.value;
+        })
+        return JSON.stringify(formattedObj)
     }
 })
 
@@ -79,6 +91,7 @@ Template.profile.onRendered(() => {
                     formattedValues.push({emoticon: type, value: Math.round(aggregation[type] / maxValue * 100)});
                 });
 
+                reactionProfileData.set(formattedValues);
                 console.log(formattedValues);
             })
 

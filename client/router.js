@@ -41,8 +41,8 @@ authenticated.route("/logout", {
     }
 })
 
-authenticated.route("/profile", {
-    action: () => {
+authenticated.route("/profile/:username", {
+    action: (params, queryParams) => {
         BlazeLayout.render("mainLayout", {content: "profile"});
     }
 })
