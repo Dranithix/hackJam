@@ -29,12 +29,9 @@ Template.profile.events({
             timeoutQuery = Meteor.setTimeout(() => {
                 if (text !== lastQuery) {
                     // Search for new images.
-                    console.log(text);
                     Meteor.call('images.search', text, (err, res) => {
                         if (!err) {
                             imageResults.set(res.value);
-
-                            let thumbnailUrls = _.pluck(imageResults.get(), 'thumbnailUrl');
                         }
                     });
 
@@ -42,17 +39,14 @@ Template.profile.events({
                 }
                 timeoutQuery = -1;
             }, 1000);
-            console.log(timeoutQuery);
         }
     },
 })
 
 Template.profile.onRendered(() => {
     Template.instance().autorun(() => {
-        imageResults.get();
-        $(".grid").isotope({
-            itemSelector: '.grid-item',
-            layoutMode: 'fitRows'
-        });
+        if (Meteor.user()) {
+            console.log(Meteor.user().username);
+        }
     });
 });

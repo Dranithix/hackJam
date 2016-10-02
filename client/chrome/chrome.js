@@ -36,6 +36,7 @@ Template.chrome.onRendered(function () {
         if (event.data == YT.PlayerState.PLAYING) {
             Promise.all([player.getVideoUrl(), player.getVideoData()]).then((result) => {
                 videoUrl = result[0];
+                console.log(result[1]);
                 videoName = result[1].title;
             });
             playing = true;

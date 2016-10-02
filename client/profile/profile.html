@@ -1,7 +1,7 @@
 <template name="profile">
     <div class="ui container grid">
         <div class="row">
-            <div class="ui form">
+            <div class="sixteen wide column ui form">
                 <div class="field">
                     <label>Input:</label>
                     <input id='query' type="text" name="query"
@@ -11,7 +11,8 @@
         </div>
         <div class="row">
             {{#each thumbnail in thumbnails}}
-                <div class="four wide column"><img class="thumbnail" src="{{thumbnail}}"></div>
+                <div class="four wide column"><a class="theme-choice" href="#"><img class="thumbnail"
+                                                                                    src="{{thumbnail}}"></a></div>
             {{/each}}
         </div>
     </div>
