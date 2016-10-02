@@ -46,11 +46,40 @@ Template.profile.events({
 Template.profile.onRendered(() => {
     Template.instance().autorun(() => {
         if (Meteor.user() && Meteor.user().username) {
-            let posts = Posts.find({});
+            let posts = Posts.find({}).fetch();
             _.each(posts, (post) => {
                 let emotions = post.emotions;
-                let reactionHistory = _.filter(emotions, (entry) => watcher === Meteor.user().username)
-                console.log(reactionHistory);
+                let reactionHistory = _.filter(emotions, (entry) => entry.watcher === Meteor.user().username)
+
+                let aggregation = {};
+                _.each(reactionHistory, (data) => {
+                    _.each(Object.keys(data.emotions), (type) => {
+                        if (type != "contempt" && type != "engagement") {
+                            if (!(type in aggregation)) aggregation[type] = 0;
+                            aggregation[type] += data.emotions[type];
+                        }
+                    });
+                })
+
+                _.each(Object.keys(aggregation), (type) => {
+                    aggregation[type] /= reactions.length;
+                    aggregation[type] = +aggregation[type].toFixed(2);
+                })
+
+                let maxValue = 0;
+                _.each(Object.keys(aggregation), (type) => {
+                    if (aggregation[type] > maxValue) {
+                        maxValue = aggregation[type];
+                    }
+                });
+
+                let formattedValues = [];
+
+                _.each(Object.keys(aggregation), (type) => {
+                    formattedValues.push({emoticon: type, value: Math.round(aggregation[type] / maxValue * 100)});
+                });
+
+                console.log(formattedValues);
             })
 
         }
