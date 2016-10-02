@@ -3,7 +3,7 @@ import {ReactiveVar} from "meteor/reactive-var";
 const imageResults = new ReactiveVar();
 
 Template.profile.onCreated(() => {
-
+    Meteor.subscribe("posts.all");
 });
 
 Template.profile.helpers({
@@ -45,8 +45,14 @@ Template.profile.events({
 
 Template.profile.onRendered(() => {
     Template.instance().autorun(() => {
-        if (Meteor.user()) {
-            console.log(Meteor.user().username);
+        if (Meteor.user() && Meteor.user().username) {
+            let posts = Posts.find({});
+            _.each(posts, (post) => {
+                let emotions = post.emotions;
+                let reactionHistory = _.filter(emotions, (entry) => watcher === Meteor.user().username)
+                console.log(reactionHistory);
+            })
+
         }
     });
 });
